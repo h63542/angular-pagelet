@@ -1,7 +1,7 @@
 'use strict';
 
 /* Services */
-(function() {
+define(function(require,exports,module) {
 	/**
 	 * Current URL INFO
 	 */
@@ -60,4 +60,4 @@
 	}
 	angular.module('sibo.services', []).
 	value('version', '0.1');
-})();
+});
