@@ -9,11 +9,12 @@
 seajs.config({
     alias : {
         'base' : '/app/js/',
-        'jquery' : '/app/lib/jquery/jquery-1.7.2.min',
-        'jquery-plug' : '/app/lib/jquery/plugs',
-        'sea-plug' : '/app/lib/seajs/plugs'
+        'jquery' : './lib/jquery/jquery-1.7.2.min',
+        'angular' : './lib/angular/angular',
+        'jquery-plug' : './lib/jquery/plugs',
+        'sea-plug' : './lib/seajs/plugs'
     },
-    preload : ['jquery'],
+    preload : ['jquery','angular'],
     charset : "utf-8",
     debug : true
 });

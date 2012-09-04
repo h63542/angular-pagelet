@@ -5,20 +5,21 @@ define(function(require,exports,module) {
 	/**
 	 * Current URL INFO
 	 */
-	function PageletLoaction(){
-		var currentPageletInstances,lastPageletInstances;
+	function PageletLoactionProvider(){
+		var currentPageletInstances,lastPageletInstances={};
 		this.$get = ['$rootScope', '$location', '$routeParams', '$q', '$injector',
 			function($rootScope, $location, $routeParams, $q, $injector){
 			//1.init prase url
 			//2.lisnener web browser url change evnet
-		    $rootScope.$on('$locationChangeSuccess', updatePagelet);
 			return {
-
+				init:function() {
+				    $rootScope.$on('$locationChangeSuccess', updatePagelet);
+				}
 			};
 			function updatePagelet(){
-				var util = require("js/util"),
+				var util = require("./util"),
 				item,last,current;
-				currentPageletInstances = util.parseLocation2Pagelet($location.path());
+				currentPageletInstances = util.parseLocation2Pagelet($location.absUrl());
 				//compare to lastInstance, find which pagelet has changed
 				if(angular.equals(currentPageletInstances,lastPageletInstances)){
 					return;
@@ -30,13 +31,13 @@ define(function(require,exports,module) {
 								&& !(angular.equals(lastPageletInstances[item],current))){
 									//send pagelet update event
 									last = lastPageletInstances[item];
-									$rootScope.$boradcast("sibo_pageletUpdate",current,angular.copy(last,{}));
+									$rootScope.$broadcast("sibo_pageletUpdate",current,angular.copy(last,{}));
 									lastPageletInstances[item] = current;
 							}else{
 								//send new pagelet request event
 								//send pagelet update event
-								last = lastPageletInstances[item];
-								$rootScope.$boradcast("sibo_pageletNew",current);
+								last = current;
+								$rootScope.$broadcast("sibo_pageletNew",current);
 								lastPageletInstances[item] = current;
 							}
 						}
@@ -48,16 +49,19 @@ define(function(require,exports,module) {
 	/**
 	 * Manager Pagelet MetaInfo
 	 */
-	function PageletMetaService(){
-		this.$get = ['',function(){
-
+	function PageletMetaServiceProvider(){
+		this.$get = ['$rootScope', '$location', '$routeParams', '$q', '$injector',
+			function($rootScope, $location, $routeParams, $q, $injector){
 			return {
+				getPageletMeta:function(){
 
+				}
 			};
 		}];
 		//1.loadall Pagelet Meta
 		
 	}
-	angular.module('sibo.services', []).
-	value('version', '0.1');
+	angular.module('sibo.services', [])
+	.provider('pageletMetaService', PageletMetaServiceProvider)
+	.provider('pageletLoaction',PageletLoactionProvider);
 });
