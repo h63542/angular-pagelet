@@ -1,8 +1,8 @@
 'use strict';
 define(function(require, exports, module){
   var siboPagelet = ['$http', '$location','$templateCache', '$anchorScroll', '$compile',
-                         '$controller','pageletMetaService',function($http, $location,$templateCache, $anchorScroll, $compile,
-                         $controller,pageletMetaService){
+                         '$controller','$q','pageletMetaService',function($http, $location,$templateCache, $anchorScroll, $compile,
+                         $controller,$q,pageletMetaService){
     return {
       restrict : "E",
       compile:function(element, attr, linker){
@@ -14,7 +14,7 @@ define(function(require, exports, module){
         });
         return function(scope, pageletStartElement, attr){
             //current dirctive's pagelet Meta,pagelet's name,current pagelet state's name,pagelet state's controller,state's view Template
-            var p_name,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,lastScope,
+            var p_name,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,lastScope,
                 onloadExp = attr.onload || '',
                 currentPagelet,last,locals={},template;
             //pageletMeta = pageletMetaService.getPageletMeta(attr.name);
@@ -33,9 +33,8 @@ define(function(require, exports, module){
                 console.info("link");  
                 console.info(pageletMeta);  
                 var currentPageletInstances = util.parseLocation2Pagelet($location.absUrl());
-                if(currentPageletInstances.hasOwnProperty(pageletMeta.id)){
-                    currentPagelet = currentPageletInstances[pageletMeta.id];
-                }else{
+                currentPagelet = getCurrentPageletInstance(pageletMeta.id);
+                if(!currentPagelet){
                     currentPagelet = {
                       pageletName:pageletMeta.id,
                       stateName:pageletMeta.defaultState,
@@ -44,6 +43,14 @@ define(function(require, exports, module){
                     }
                 }
                 loadContent();
+                function getCurrentPageletInstance(id){
+                  for(var i=0;i<currentPageletInstances.length;i++){
+                    if(currentPageletInstances[i].pageletName === id){
+                      return currentPageletInstances[i];
+                    }
+                    return undefined;
+                  }
+                }
 
             }
             function registerPageletEvent(){
@@ -57,7 +64,7 @@ define(function(require, exports, module){
                     return;
                 }
                 //judge  whether current pagelet has update 
-                if(currentPagelet.id === pageletMeta.id){
+                if(currentPagelet.pageletName === pageletMeta.id){
                   loadContent()
                 }
             }
@@ -68,7 +75,7 @@ define(function(require, exports, module){
                       return;
                   }
                   //judge  whether current pagelet has update 
-              if(currentPagelet.id === pageletMeta.id){
+              if(currentPagelet.pageletName === pageletMeta.id){
                     loadContent()
                   }
             }
@@ -84,47 +91,52 @@ define(function(require, exports, module){
             }
             function loadContent(){
                   p_controller = pageletMeta.controller;
+                  p_model = pageletMeta.model||{};
                   p_s_name = currentPagelet["stateName"];
-                  p_s_view = pageletMeta.states[p_s_name].view;
-                  p_s_model = pageletMeta.states[p_s_name].model;
-                  p_s_controller = pageletMeta.states[p_s_name].controller;
-
-
+                  p_s = pageletMeta.states[p_s_name];
+                  if(!p_s){
+                      p_s = {view:"error.html",model:{erroecode:"-1",message:"State:"+p_s_name+" not exit!"}};
+                  }
+                  p_s_view = p_s.view;
+                  p_s_model = p_s.model;
+                  p_s_controller = p_s.controller;
                   if(!p_s_view){
                     p_s_view = pageletMeta.states[pageletMeta.defaultState];
                   }
                   //1.load new state content
                   //2.invoke afterPagelet update callback function
                   if(p_s_view){
-                    template = $http.get(template, {cache: $templateCache}).
+                    template = $http.get(p_s_view, {cache: $templateCache}).
                     then(function(response) { return response.data; });
-                    if(template){
-                      element.html(template);
-                      destroyLastScope();
-                      var link = $compile(element.contents()),
-                          current = {},
-                          controller;
-                      //construct scope object(merage pagelet'model and p_s_model )
-                      lastScope = current.scope = angular.extend(scope.$new(),angular.extend(p_model, p_s_model));
 
-                      if(p_s_controller){
-                          current.controller = angular.extend(p_s_controller,p_controller);
+                    $q.when(template).then(function(data){
+                      if(data){
+                        element.html(data);
+                        destroyLastScope();
+                        var link = $compile(element.contents()),
+                            current = {},
+                            controller;
+                        //construct scope object(merage pagelet'model and p_s_model )
+                        lastScope = current.scope = angular.extend(scope.$new(),angular.extend(p_model, p_s_model));
+                        if(p_s_controller){
+                            current.controller = angular.extend(p_s_controller,p_controller);
+                        }else{
+                            current.controller = p_controller;
+                        }
+                        if (current.controller) {
+                          locals.$scope = lastScope;
+                          controller = $controller(current.controller, locals);
+                          element.contents().data('$ngControllerController', controller);
+                        }
+                        link(lastScope);
+                        lastScope.$emit('sibo_pageletLoaded');
+                        lastScope.$eval(onloadExp);
+                        // $anchorScroll might listen on event...
+                        $anchorScroll();
                       }else{
-                          current.controller = p_controller;
+                        clearContent();
                       }
-                      if (current.controller) {
-                        locals.$scope = lastScope;
-                        controller = $controller(current.controller, locals);
-                        element.contents().data('$ngControllerController', controller);
-                      }
-                      link(lastScope);
-                      lastScope.$emit('sibo_pageletLoaded');
-                      lastScope.$eval(onloadExp);
-                      // $anchorScroll might listen on event...
-                      $anchorScroll();
-                    }else{
-                      clearContent();
-                    }
+                    });
                   }else{
                       clearContent();
                   }

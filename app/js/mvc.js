@@ -1,16 +1,17 @@
 define(function (require,exports,module) {
 	exports.init = function  (config) {
-		var frameworkModules = 	['sibo.directives','sibo.services'],dependencies;
-		_loadFrameWorkModule();
-		if(config && angular.isArray(config.dependencies)){
-			dependencies = angular.copy(frameworkModules, (config.dependencies||[]));
+		var frameworkModules = 	['sibo.directives','sibo.services'],dependencies=[];
+		if(config){
+			dependencies = config.dependencies||{};
 		}
+		_loadFrameWorkModule();
+		dependencies = _.union(frameworkModules, dependencies);
 		$(function(){
 			_bootStrapAngular(dependencies);
 		});		
 	}
 	function _bootStrapAngular(dependencies){
-		var app = angular.module("sibo.mvc",['sibo.directives','sibo.services']);
+		var app = angular.module("sibo.mvc",dependencies);
 		angular.bootstrap(document,["sibo.mvc"]);
 	}
 	function _loadFrameWorkModule(){

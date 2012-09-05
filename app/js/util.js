@@ -27,6 +27,7 @@ define(function (require, exports, module) {
 			return uri;
 	};
 	exports.parseLocation2Pagelet = function(url){
+		url = url.replace(/%2F/g,"/").replace(/%23/g,"#").replace(/%3F/g,"?");
 		var pagelets = [],uri = parseUri(url);
 		pareseAnchor(uri["anchor"]);
 		function pareseAnchor(anchor){

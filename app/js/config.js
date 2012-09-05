@@ -8,13 +8,13 @@
 
 seajs.config({
     alias : {
-        'base' : '/app/js/',
-        'jquery' : './lib/jquery/jquery-1.7.2.min',
-        'angular' : './lib/angular/angular',
-        'jquery-plug' : './lib/jquery/plugs',
-        'sea-plug' : './lib/seajs/plugs'
+        'base' : '/app/',
+        'underscore' : '/app/lib/underscore-min',
+        'angular-ui':'/app/lib/angular-ui/angular-ui',
+        'jquery-plug' : '/app/lib/jquery/plugs',
+        'sea-plug' : '/app/lib/seajs/plugs'
     },
-    preload : ['jquery','angular'],
+    preload : ['underscore','angular-ui'],
     charset : "utf-8",
     debug : true
 });
