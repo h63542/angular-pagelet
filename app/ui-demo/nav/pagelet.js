@@ -4,11 +4,11 @@ define(function (require,exports,module) {
 	//$scope.codeMirrorModel = "var helloWorld = 'Success!';";
 	exports.pagelet = {
 		id:'nav',
-		defaultState:"accordion",
+		defaultState:"tree",
 		model:navModel,
 		states:{
-			accordion:{view:'nav/accordion.html',controller:AccordionController},
-			tree:{view:'nav/tree.html',controller:TreeController}
+			accordion:{view:'accordion.html',controller:AccordionController},
+			tree:{view:'tree.html',controller:TreeController}
 		}
 	};
 	function AccordionController($scope){

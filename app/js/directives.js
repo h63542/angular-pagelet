@@ -7,7 +7,8 @@ define(function(require, exports, module){
       restrict : "E",
       compile:function(element, attr, linker){
         var define = attr["define"],loadsucess = false,util = require("./util"),
-            pageletMeta;
+            pageletMeta,pageletBase=define.substring(0,define.lastIndexOf("/"));
+
         require.async(define,function(meta){
             console.info(meta.pagelet);  
             pageletMeta = meta.pagelet;
@@ -106,7 +107,7 @@ define(function(require, exports, module){
                   //1.load new state content
                   //2.invoke afterPagelet update callback function
                   if(p_s_view){
-                    template = $http.get(p_s_view, {cache: $templateCache}).
+                    template = $http.get(pageletBase+"/"+p_s_view, {cache: $templateCache}).
                     then(function(response) { return response.data; });
 
                     $q.when(template).then(function(data){
