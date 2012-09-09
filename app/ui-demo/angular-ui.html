@@ -4,6 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel="stylesheet" href="/app/lib/angular-ui/angular-ui.css">
     <link href="/app/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/app/lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link href="css/doc.css" rel="stylesheet">
     <title>App Index</title>
     <script type="text/javascript">
     function appController($scope){
@@ -18,29 +20,38 @@
     }
     </script>
 </head>
-<body>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
     <div class="navbar navbar-inverse navbar-fixed-top">
         <sibo-pagelet define="/app/ui-demo/header/header.js"></sibo-pagelet>
     </div>
-    <div class="container-fluid">
-      <div class="row-fluid">
-        <div class="span3">
-            <sibo-pagelet define="/app/ui-demo/nav/pagelet.js"></sibo-pagelet>
-        </div><!--/span-->
-        <div class="span9">
-            <sibo-pagelet define="/app/ui-demo/content/content.js"></sibo-pagelet>
-        </div><!--/span-->
-      </div><!--/row-->
+
+    <header class="jumbotron subhead" id="overview">
+      <div class="container">
+        <h1>Components</h1>
+        <p class="lead">Dozens of reusable components built to provide navigation, alerts, popovers, and more.</p>
+      </div>
+    </header>
+
+   <div class="container">
+        <div class="row">
+            <div class="span3 bs-docs-sidebar">
+                <sibo-pagelet define="/app/ui-demo/nav/pagelet.js"></sibo-pagelet>
+            </div>
+            <div class="span9">
+                <sibo-pagelet id="content" define="/app/ui-demo/content/content.js"></sibo-pagelet>
+            </div>
+        </div><!--/row-->
       <hr>
       <footer>
         <p>&copy; Company 2012</p>
       </footer>
-    </div><!--/.fluid-container-->
+    </div><!--/.container-->
 	<script type="text/javascript" src="/app/lib/jquery/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="/app/lib/angular/angular.js"></script>
-    <script type="text/javascript" src="/app/lib/bootstrap/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/app/lib/bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/app/lib/seajs/sea.js"></script>
-	<script type="text/javascript" src="/app/js/config.js"></script>
+    <script type="text/javascript" src="/app/js/config.js"></script>
+	<script type="text/javascript" src="/app/ui-demo/js/showdown.js"></script>
 	<script type="text/javascript">
 	    seajs.use('base/js/mvc', pageInit);
 	    function pageInit(mvc){

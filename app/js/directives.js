@@ -15,7 +15,7 @@ define(function(require, exports, module){
         });
         return function(scope, pageletStartElement, attr){
             //current dirctive's pagelet Meta,pagelet's name,current pagelet state's name,pagelet state's controller,state's view Template
-            var p_name,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,lastScope,
+            var p_name,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,p_events,lastScope,
                 onloadExp = attr.onload || '',
                 currentPagelet,last,locals={},template;
             //pageletMeta = pageletMetaService.getPageletMeta(attr.name);
@@ -134,6 +134,18 @@ define(function(require, exports, module){
                         lastScope.$eval(onloadExp);
                         // $anchorScroll might listen on event...
                         $anchorScroll();
+
+                        //register event binding
+                        p_events = pageletMeta.events;
+                        if(_.isObject(p_events)){
+                          for(var it in p_events){
+                            if(p_events.hasOwnProperty(it)){
+                              if(_.isFunction(p_events[it])){
+                                  scope.$on(pageletMeta.id+"."+it,p_events[it]);
+                              }
+                            }
+                          }
+                        }
                       }else{
                         clearContent();
                       }
@@ -142,14 +154,33 @@ define(function(require, exports, module){
                       clearContent();
                   }
             }
-
         };
       }
     };
   }];
+
+  var markdown = function(){
+    var showdown = new Showdown.converter(),
+        template = '<section>' +
+                     '<article ng-bind-html-unsafe="markdown(content)"></article>';
+    
+    return {
+        restrict: 'E',
+        scope: {},
+        compile: function(templateElement) {
+            var initialContent = templateElement.html();
+            templateElement.html(template);
+            return function(scope, element, attrs) {
+              scope.content = initialContent;
+                scope.markdown = showdown.makeHtml;
+            }
+        }
+    }
+  }
   /* Directives */
   angular.module('sibo.directives', ['sibo.services']).
     directive('siboPagelet', siboPagelet)
+    .directive('markdown',markdown)
     .run(['pageletLoaction',function(pageletLoaction){
             pageletLoaction.init();
           }]);

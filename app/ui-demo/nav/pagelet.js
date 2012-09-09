@@ -15,6 +15,12 @@ define(function (require,exports,module) {
 
 	}
 	function TreeController($scope){
-
+		$scope.sendEvent = sendEvent;
+	}
+	function sendEvent(){
+		var pageletEvent = require("base/js/pageletEvent");
+		if(pageletEvent){
+			pageletEvent.sendPageLetEvent("content","testEvnetId","message");
+		}
 	}
 })
