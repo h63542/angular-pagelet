@@ -2,9 +2,17 @@ angular-pagelet
 ===============
 
 a framework  for single page app base angular.
+
+how to run demo
+1.install node.js
+2.cd angular-pagelet dir
+3.run <code>node script/web-server.js</code>
+4.open <code>http://localhost:8000/app/ui-demo/angular-ui.html</code>
+5.demo is a angular-ui doc demo use angular-pagelet
+
 2012.09.03
 1.pagelet directive
-2.
+2.support pagelet nesting
 
 2012.09.06 
 1、pagelet state view path can use relative path
