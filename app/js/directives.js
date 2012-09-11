@@ -15,9 +15,9 @@ define(function(require, exports, module){
         });
         return function(scope, pageletStartElement, attr){
             //current dirctive's pagelet Meta,pagelet's name,current pagelet state's name,pagelet state's controller,state's view Template
-            var p_name,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,p_events,lastScope,
+            var p_name,p_template,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,p_events,lastScope,
                 onloadExp = attr.onload || '',
-                currentPagelet,last,locals={},template;
+                currentPagelet,last,locals={},p_content,s_template;
             //pageletMeta = pageletMetaService.getPageletMeta(attr.name);
             if(!pageletMeta){
                 require.async(define,function(meta){
@@ -91,8 +91,10 @@ define(function(require, exports, module){
               destroyLastScope();
             }
             function loadContent(){
+                  var state_parentElement;
                   p_controller = pageletMeta.controller;
                   p_model = pageletMeta.model||{};
+                  p_template = pageletMeta.template;
                   p_s_name = currentPagelet["stateName"];
                   p_s = pageletMeta.states[p_s_name];
                   if(!p_s){
@@ -101,18 +103,42 @@ define(function(require, exports, module){
                   p_s_view = p_s.view;
                   p_s_model = p_s.model;
                   p_s_controller = p_s.controller;
+                  
+
+                  if(!p_s_view){
+                    p_s_view = pageletMeta.states[pageletMeta.defaultState];
+                  }
+
+                  //load template
+                  if(p_template){
+                      p_content = $http.get(pageletBase+"/"+p_template, {cache: $templateCache}).
+                    then(function(response) { return response.data; }); 
+                      $q.when(p_content).then(function(content){
+                        if(content){
+                             element.html(content);
+                        }
+                      })
+                  }
+
                   if(!p_s_view){
                     p_s_view = pageletMeta.states[pageletMeta.defaultState];
                   }
                   //1.load new state content
                   //2.invoke afterPagelet update callback function
                   if(p_s_view){
-                    template = $http.get(pageletBase+"/"+p_s_view, {cache: $templateCache}).
+                    s_template = $http.get(pageletBase+"/"+p_s_view, {cache: $templateCache}).
                     then(function(response) { return response.data; });
 
-                    $q.when(template).then(function(data){
+                    $q.when(s_template).then(function(data){
                       if(data){
-                        element.html(data);
+                        if(element.find("div.pagelet-template").length > 0){
+                          state_parentElement = angular.element(element.find("div.pagelet-template")[0]);
+                        }else if(element.find("pagelet-template").length > 0){
+                          state_parentElement = angular.element(element.find("pagelet-template")[0]);;
+                        }else{
+                          state_parentElement = element;
+                        }
+                        state_parentElement.html(data);
                         destroyLastScope();
                         var link = $compile(element.contents()),
                             current = {},

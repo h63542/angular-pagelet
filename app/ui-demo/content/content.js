@@ -3,6 +3,7 @@ define(function (require,exports,module) {
 		id:'content',
 		defaultState:"content",
 		model:{},
+		template:"content.html",
 		states:{
 			content:{view:"content.html"},
 			date:{view:"../components/Date.html"},
