@@ -16,7 +16,7 @@ define(function (require,exports,module) {
 		}
 	};
 	function onParamUpdate(scope,oldParam,newParam){
-		console.info(oldParam);
+		console.info(scope);
 		console.info(newParam);
 	}
 })

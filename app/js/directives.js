@@ -28,6 +28,10 @@ define(function(require, exports, module){
                 initExecLink();
                 registerPageletEvent();
             }
+            /**
+             * init exec Pagele init
+             * @return {[type]} [description]
+             */
             function initExecLink(){
                 var currentPageletInstances = util.parseLocation2Pagelet($location.absUrl());
                 currentPagelet = getCurrentPageletInstance(pageletMeta.id);
@@ -60,6 +64,7 @@ define(function(require, exports, module){
                 if(!pageletMeta){
                     return;
                 }
+                bindingQueryParam2Scope(currentPagelet.queryParam);
                 //judge  whether current pagelet has update 
                 if(currentPagelet.pageletName === pageletMeta.id){
                   //if state has update
@@ -78,10 +83,11 @@ define(function(require, exports, module){
               if(!pageletMeta){
                       return;
                   }
-                  //judge  whether current pagelet has update 
+              bindingQueryParam2Scope(currentPagelet.queryParam);    
+              //judge  whether current pagelet has update 
               if(currentPagelet.pageletName === pageletMeta.id){
                     loadContent()
-                  }
+              }
             }
             function destroyLastScope() {
               if (lastScope) {
@@ -93,6 +99,11 @@ define(function(require, exports, module){
               element.html('');
               destroyLastScope();
             }
+            /**
+             * get PageletMeta attribute value
+             * @param  {[type]} attrName [description]
+             * @return {[type]}          [description]
+             */
             function getPageletMetaAttr(attrName){
                 if(_.isFunction(pageletMeta[attrName])){
                   pageletMeta[attrName](scope);
@@ -100,6 +111,12 @@ define(function(require, exports, module){
                   return pageletMeta[attrName];
                 }
             }
+            /**
+             * when pagelet queryParam has change invoked 
+             * @param  {[type]} oldParam [description]
+             * @param  {[type]} newParam [description]
+             * @return {[type]}          [description]
+             */
             function updateQueryParam(oldParam,newParam){
               var states = getPageletMetaAttr("states");
               p_s_name = currentPagelet["stateName"];
@@ -107,6 +124,16 @@ define(function(require, exports, module){
               if(_.isFunction(p_s["onParamUpdate"])){
                   p_s["onParamUpdate"](scope,oldParam,newParam);
               }
+            }
+            /**
+             * bind pagelet queryParam to scope Object
+             * @param  {[type]} newParam [description]
+             * @return {[type]}          [description]
+             * TODO bind queryParam to scope Object property
+             * 
+             */
+            function bindingQueryParam2Scope(newParam){
+                scope._queryParam = newParam;
             }
             function loadContent(){
                 var state_parentElement;
