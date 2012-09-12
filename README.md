@@ -30,15 +30,15 @@ a framework  for single page app base angular.
 2012.09.11  
 
 1. pagelet add template att,   
- two type template:<div class="pagelet-template"></div> and <pagelet-template></pagelet-template>
- every pagelet only support one template, state view will load in template
+   two type template:<div class="pagelet-template"></div> and <pagelet-template></pagelet-template>
+   every pagelet only support one template, state view will load in template
 
- 2012.09.12
- 1. add url param binding: state define add onParamUpdate attribute( as a Function)
- 2. add pagelet Params bind to scope Object 
+2012.09.12
+1. add url param binding: state define add onParamUpdate attribute( as a Function)
+2. add pagelet Params bind to scope Object 
 
- will to do
- 1. pagelet can define dependency seajsModule
- 2. pagelet can define dependcncy angularModule
- 3. optimize load proformace
- 4. add test code
+Will to do
+1. pagelet can define dependency seajsModule
+2. pagelet can define dependcncy angularModule
+3. optimize load proformace
+4. add test code
