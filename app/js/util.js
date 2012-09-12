@@ -37,7 +37,7 @@ define(function (require, exports, module) {
 			}
 			nextAnchor = parseUri(anchor);
 			anchorPath = nextAnchor["path"];
-			prex = /^\/([a-z0-9_\.-]+)\/([a-z0-9_\.-]+)(\/[a-z0-9_\.\/-]+)?/g;
+			prex = /^\/([a-zA-Z0-9_\.-]+)\/([a-zA-Z0-9_\.-]+)(\/[a-zA-Z0-9_\.\/-]+)?/g;
 			pageletPaths = prex.exec(nextAnchor["path"]);
 			if(pageletPaths){
 				pageletInfo = {
@@ -49,6 +49,9 @@ define(function (require, exports, module) {
 				pagelets.push(pageletInfo);
 			}
 			pareseAnchor(nextAnchor["anchor"]);
+			function buildPageletInfo(){
+				
+			}
 		}
 		return pagelets;
 	}
