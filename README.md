@@ -34,7 +34,8 @@ a framework  for single page app base angular.
  every pagelet only support one template, state view will load in template
 
  2012.09.12
- 1.add url param binding: state define add onParamUpdate attribute( as a Function)
+ 1. add url param binding: state define add onParamUpdate attribute( as a Function)
+ 2. add pagelet Params bind to scope Object 
 
  will to do
  1. pagelet can define dependency seajsModule
