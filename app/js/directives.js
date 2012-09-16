@@ -180,6 +180,7 @@ define(function(require, exports, module){
                       }else{
                         state_parentElement = element;
                       }
+                      //util.html(state_parentElement,data);
                       state_parentElement.html(data);
                       destroyLastScope();
                       var link = $compile(element.contents()),

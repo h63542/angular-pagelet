@@ -12,20 +12,13 @@ a framework  for single page app base angular.
 5. demo is a angular-ui doc demo use angular-pagelet
 
 ### changelog
-2012.09.03  
 
-1. pagelet directive
-2. support pagelet nesting
+2012.09.16
+1.	add new angularUI api doc
 
-2012.09.06   
-
-1. pagelet state view path can use relative path
-2. add bootstrap plugin,and use bootstrap for demo
-
-2012.09.08   
-
-1. add pagelet event mechanism 
-2. pagelet define attr can use a expression 
+2012.09.12  
+1. add url param binding: state define add onParamUpdate attribute( as a Function) 
+2. add pagelet Params bind to scope Object
 
 2012.09.11  
 
@@ -33,9 +26,20 @@ a framework  for single page app base angular.
    two type template:<div class="pagelet-template"></div> and <pagelet-template></pagelet-template>
    every pagelet only support one template, state view will load in template
 
-2012.09.12  
-1. add url param binding: state define add onParamUpdate attribute( as a Function) 
-2. add pagelet Params bind to scope Object  
+2012.09.08   
+
+1. add pagelet event mechanism 
+2. pagelet define attr can use a expression 
+
+2012.09.06   
+
+1. pagelet state view path can use relative path
+2. add bootstrap plugin,and use bootstrap for demo
+
+2012.09.02  
+
+1. pagelet directive
+2. support pagelet nesting  
 
 Will to do  
 1. pagelet can define dependency seajsModule 

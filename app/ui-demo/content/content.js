@@ -1,11 +1,26 @@
 define(function (require,exports,module) {
+	var PassthroughModel = {
+		"ui.config":{
+		   // The ui-jq directive namespace
+		   jq: {
+		      // The qtip namespace
+		      qtip: {
+		         // qTip options. This object will be used as the defaults
+		         position: {
+		            my: 'left center',
+		            at:'right center'
+		         }
+		      }
+		   }
+		}
+	};
 	exports.pagelet = {
 		id:'content',
-		defaultState:"content",
+		defaultState:"date",
 		model:{},
 		template:"content.html",
 		states:{
-			content:{view:"content.html",onParamUpdate:onParamUpdate},
+			Passthrough:{view:"../components/Passthrough.html",onParamUpdate:onParamUpdate},
 			date:{view:"../components/Date.html",onParamUpdate:onParamUpdate},
 			markdown:{view:"../components/markdown.html"}
 		},
