@@ -12,7 +12,8 @@ define(function (require,exports,module) {
 		         }
 		      }
 		   }
-		}
+		},
+		demoUrl:"../components/Passthrough_demo.html"
 	};
 	exports.pagelet = {
 		id:'content',
@@ -20,7 +21,7 @@ define(function (require,exports,module) {
 		model:{},
 		template:"content.html",
 		states:{
-			Passthrough:{view:"../components/Passthrough.html",onParamUpdate:onParamUpdate},
+			Passthrough:{view:"../components/doc.html",onParamUpdate:onParamUpdate,model:PassthroughModel},
 			date:{view:"../components/Date.html",onParamUpdate:onParamUpdate},
 			markdown:{view:"../components/markdown.html"}
 		},

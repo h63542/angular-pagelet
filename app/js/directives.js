@@ -187,6 +187,7 @@ define(function(require, exports, module){
                           current = {},
                           controller;
                       //construct scope object(merage pagelet'model and p_s_model )
+                      p_model = angular.extend(p_model,{"pageletBase":pageletBase+"/"});
                       lastScope = current.scope = angular.extend(scope.$new(),angular.extend(p_model, p_s_model));
                       if(p_s_controller){
                           current.controller = angular.extend(p_s_controller,p_controller);
