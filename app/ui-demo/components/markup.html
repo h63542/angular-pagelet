@@ -1,0 +1,20 @@
+<head>
+<script src="/lib/codeMirror/codemirror.js"></script>
+<script src="/lib/codeMirror/mode/javascript/javascript.js"></script>
+<link rel="stylesheet" href="/lib/codeMirror/codemirror.css">
+<link rel="stylesheet" href="/lib/codeMirror/theme/monokai.css" >
+<link rel="stylesheet" href="/lib/codeMirror/theme/neat.css" >
+</head>
+<script type="text/javascript">
+	function exampleCode($scope,$http,$q,$templateCache){
+		var exampleCodeStr = $http.get($scope.pageletBase+$scope.demoUrl,{cache:$templateCache})
+		.then(function(reponse){return reponse.data;}
+			,function(reason){return "var str = "+$scope.pageletBase+$scope.demoUrl+" not found!"});
+		$q.when(exampleCodeStr).then(function(content){
+			$scope.code = content;
+		});
+	}
+</script>
+<div ng-controller="exampleCode">
+	<textarea ui-codemirror="{theme:'monokai'}" ng-model="code"></textarea>
+</div>

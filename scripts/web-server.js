@@ -7,6 +7,7 @@ var sys = require('sys'),
     events = require('events');
 
 var DEFAULT_PORT = 8000;
+var webContext="app"
 
 function main(argv) {
   new HttpServer({
@@ -46,6 +47,7 @@ HttpServer.prototype.start = function(port) {
 
 HttpServer.prototype.parseUrl_ = function(urlString) {
   var parsed = url.parse(urlString);
+  console.log(parsed);
   parsed.pathname = url.resolve('/', parsed.pathname);
   return url.parse(url.format(parsed), true);
 };
@@ -86,6 +88,11 @@ StaticServlet.MimeMap = {
 
 StaticServlet.prototype.handleRequest = function(req, res) {
   var self = this;
+  //modify:if url not start with webcontext definetion, url add web context prefix
+  if(req.url.pathname.indexOf('/'+webContext)!=0){
+    req.url.pathname = "/"+webContext+"/"+req.url.pathname;
+  }
+
   var path = ('./' + req.url.pathname).replace('//','/').replace(/%(..)/, function(match, hex){
     return String.fromCharCode(parseInt(hex, 16));
   });
