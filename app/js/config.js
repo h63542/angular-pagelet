@@ -8,11 +8,11 @@
 
 seajs.config({
     alias : {
-        'base' : '/app/',
-        'underscore' : '/app/lib/underscore-min',
-        'angular-ui':'/app/lib/angular-ui/angular-ui',
-        'jquery-plug' : '/app/lib/jquery/plugs',
-        'sea-plug' : '/app/lib/seajs/plugs'
+        'base' : '/',
+        'underscore' : '../lib/underscore-min',
+        'angular-ui':'../lib/angular-ui/angular-ui',
+        'jquery-plug' : '../lib/jquery/plugs',
+        'sea-plug' : '../lib/seajs/plugs'
     },
     preload : ['underscore','angular-ui'],
     charset : "utf-8",

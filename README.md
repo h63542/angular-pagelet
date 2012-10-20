@@ -12,6 +12,9 @@ a framework  for single page app base angular.
 5. demo is a angular-ui doc demo use angular-pagelet
 
 ### changelog
+2012.10.21 modify path import rule,make demo can run in any web Server
+
+2012.10.20 add api code demo
 
 2012.09.16
 1.	add new angularUI api doc

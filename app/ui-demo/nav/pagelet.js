@@ -18,9 +18,9 @@ define(function (require,exports,module) {
 		$scope.sendEvent = sendEvent;
 	}
 	function sendEvent(){
-		var pageletEvent = require("base/js/pageletEvent");
-		if(pageletEvent){
-			pageletEvent.sendPageLetEvent("content","testEvnetId","message");
-		}
+//		var pageletEvent = require("./../js/pageletEvent");
+//		if(pageletEvent){
+//			pageletEvent.sendPageLetEvent("content","testEvnetId","message");
+//		}
 	}
 })

@@ -11,12 +11,15 @@ define(function(require, exports, module){
 
         require.async(define,function(meta){
             pageletMeta = meta.pagelet;
+            var initRequireMethod = pageletMeta["initRequire"];
+            if(_.isFunction(initRequireMethod)){
+                initRequireMethod();
+            }
         });
+
         return function(scope, pageletStartElement, attr){
             //current dirctive's pagelet Meta,pagelet's name,current pagelet state's name,pagelet state's controller,state's view Template
-            var p_name,p_template,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,p_events,lastScope,
-                onloadExp = attr.onload || '',
-                currentPagelet,last,locals={},p_content,s_template;
+            var currentPagelet,last;
             //pageletMeta = pageletMetaService.getPageletMeta(attr.name);
             if(!pageletMeta){
                 require.async(define,function(meta){
@@ -43,6 +46,7 @@ define(function(require, exports, module){
                       queryParam:[]
                     }
                 }
+                bindingQueryParam2Scope(currentPagelet.queryParam);
                 loadContent();
                 function getCurrentPageletInstance(id){
                   for(var i=0;i<currentPageletInstances.length;i++){
@@ -89,16 +93,7 @@ define(function(require, exports, module){
                     loadContent()
               }
             }
-            function destroyLastScope() {
-              if (lastScope) {
-                lastScope.$destroy();
-                lastScope = null;
-              }
-            }
-            function clearContent() {
-              element.html('');
-              destroyLastScope();
-            }
+            
             /**
              * get PageletMeta attribute value
              * @param  {[type]} attrName [description]
@@ -106,9 +101,9 @@ define(function(require, exports, module){
              */
             function getPageletMetaAttr(attrName){
                 if(_.isFunction(pageletMeta[attrName])){
-                  pageletMeta[attrName](scope);
+                  return pageletMeta[attrName](scope);
                 }else{
-                  return pageletMeta[attrName];
+                  return _.clone(pageletMeta[attrName]);
                 }
             }
             /**
@@ -136,28 +131,35 @@ define(function(require, exports, module){
                 scope._queryParam = newParam;
             }
             function loadContent(){
-                var state_parentElement;
+                var p_name,p_template,p_s,p_s_name,p_controller,p_model,p_s_model,p_s_controller,p_s_view,p_events,lastScope,
+                onloadExp = attr.onload || '',locals={},p_content,s_template,p_states,state_parentElement;
+                // is  need clone?
                 p_controller = pageletMeta.controller;
                 p_model = pageletMeta.model||{};
                 p_template = pageletMeta.template;
-                p_s_name = currentPagelet["stateName"];
-                p_s = pageletMeta.states[p_s_name];
+                p_s_name = _.clone(currentPagelet["stateName"]);
+                p_states = getPageletMetaAttr("states");
+                p_s = p_states?_.clone(p_states[p_s_name]):undefined;
                 if(!p_s){
                     p_s = {view:"error.html",model:{erroecode:"-1",message:"State:"+p_s_name+" not exit!"}};
                 }
-                p_s_view = p_s.view;
-                p_s_model = p_s.model;
+                p_s_view = p_s.view||{};
+                p_s_model = p_s.model||{};
                 p_s_controller = p_s.controller;
                 if(!p_s_view){
                   p_s_view = pageletMeta.states[pageletMeta.defaultState];
                 }
                 //load template
                 if(p_template){
-                    p_content = $http.get(pageletBase+"/"+p_template, {cache: $templateCache}).
+                  if(p_template.indexOf("/") !=0 ){
+                      p_template = pageletBase+"/"+p_template;
+                  }
+                  p_content = $http.get(p_template, {cache: $templateCache}).
                   then(function(response) { return response.data; }); 
                     $q.when(p_content).then(function(content){
                       if(content){
                            element.html(content);
+                           content = null;
                       }
                     })
                 }
@@ -168,7 +170,11 @@ define(function(require, exports, module){
                 //1.load new state content
                 //2.invoke afterPagelet update callback function
                 if(p_s_view){
-                  s_template = $http.get(pageletBase+"/"+p_s_view, {cache: $templateCache}).
+                  //if a/b/c.html -> $pageletBaseDir+a/b/c.html
+                  if(p_s_view.indexOf("/") !=0 ){
+                    p_s_view = pageletBase+"/"+p_s_view;
+                  }
+                  s_template = $http.get(p_s_view, {cache: $templateCache}).
                   then(function(response) { return response.data; });
 
                   $q.when(s_template).then(function(data){
@@ -182,12 +188,16 @@ define(function(require, exports, module){
                       }
                       //util.html(state_parentElement,data);
                       state_parentElement.html(data);
+                      data = null;
                       destroyLastScope();
                       var link = $compile(element.contents()),
                           current = {},
                           controller;
                       //construct scope object(merage pagelet'model and p_s_model )
                       p_model = angular.extend(p_model,{"pageletBase":pageletBase+"/"});
+                      if(_.isObject(currentPagelet.queryParam)){
+                        p_s_model = angular.extend(p_s_model,angular.extend(p_model,currentPagelet.queryParam));
+                      }
                       lastScope = current.scope = angular.extend(scope.$new(),angular.extend(p_model, p_s_model));
                       if(p_s_controller){
                           current.controller = angular.extend(p_s_controller,p_controller);
@@ -222,6 +232,17 @@ define(function(require, exports, module){
                   });
                 }else{
                     clearContent();
+                }
+
+                function destroyLastScope() {
+                      if (lastScope) {
+                        lastScope.$destroy();
+                        lastScope = null;
+                      }
+                    }
+                function clearContent() {
+                  element.html('');
+                  destroyLastScope();
                 }
             }
         };

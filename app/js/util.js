@@ -33,24 +33,27 @@ define(function (require, exports, module) {
 		function pareseAnchor(anchor){
 			var nextAnchor,anchorPath,prex,pageletPaths,pageletInfo;
 			if(!anchor || anchor.length === 0){
+				buildPageletInfo();
 				return;
 			}
 			nextAnchor = parseUri(anchor);
 			anchorPath = nextAnchor["path"];
-			prex = /^\/([a-zA-Z0-9_\.-]+)\/([a-zA-Z0-9_\.-]+)(\/[a-zA-Z0-9_\.\/-]+)?/g;
-			pageletPaths = prex.exec(nextAnchor["path"]);
-			if(pageletPaths){
-				pageletInfo = {
-					pageletName:pageletPaths[1],
-					stateName:pageletPaths[2],
-					path:pageletPaths[3],
-					queryParam:nextAnchor["queryKey"]
-				}
-				pagelets.push(pageletInfo);
-			}
+			buildPageletInfo();
 			pareseAnchor(nextAnchor["anchor"]);
 			function buildPageletInfo(){
-				
+				if(anchorPath){
+					prex = /^\/([a-zA-Z0-9_\.-]+)\/([a-zA-Z0-9_\.-]+)(\/[a-zA-Z0-9_\.\/-]+)?/g;
+					pageletPaths = prex.exec(nextAnchor["path"]);
+					if(pageletPaths){
+						pageletInfo = {
+							pageletName:pageletPaths[1],
+							stateName:pageletPaths[2],
+							path:pageletPaths[3],
+							queryParam:nextAnchor["queryKey"]
+						}
+						pagelets.push(pageletInfo);
+					}
+				}
 			}
 		}
 		return pagelets;

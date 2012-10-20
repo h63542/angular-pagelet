@@ -2,9 +2,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link rel="stylesheet" href="/lib/angular-ui/angular-ui.css">
-    <link href="/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../lib/angular-ui/angular-ui.css">
+    <link href="../lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../lib/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="css/doc.css" rel="stylesheet">
     <title>App Index</title>
     <script type="text/javascript">
@@ -22,7 +22,7 @@
 </head>
 <body data-spy="scroll" data-target=".bs-docs-sidebar">
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <sibo-pagelet define="/ui-demo/header/header.js"></sibo-pagelet>
+        <sibo-pagelet define="../ui-demo/header/header.js"></sibo-pagelet>
     </div>
     <header class="jumbotron subhead" id="overview">
       <div class="container">
@@ -33,10 +33,10 @@
    <div class="container" style="margin:20px 0 0 0">
         <div class="row">
             <div class="span3 bs-docs-sidebar">
-                <sibo-pagelet define="/ui-demo/nav/pagelet.js"></sibo-pagelet>
+                <sibo-pagelet define="../ui-demo/nav/pagelet.js"></sibo-pagelet>
             </div>
             <div class="span9">
-                <sibo-pagelet id="content" define="/ui-demo/content/content.js"></sibo-pagelet>
+                <sibo-pagelet id="content" define="../ui-demo/content/content.js"></sibo-pagelet>
             </div>
         </div><!--/row-->
       <hr>
@@ -44,14 +44,14 @@
         <p>&copy; Company 2012</p>
       </footer>
     </div><!--/.container-->
-	<script type="text/javascript" src="/lib/jquery/jquery-1.7.2.js"></script>
-	<script type="text/javascript" src="/lib/angular/angular.js"></script>
-    <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/lib/seajs/sea.js"></script>
-    <script type="text/javascript" src="/js/config.js"></script>
-	<script type="text/javascript" src="/ui-demo/js/showdown.js"></script>
+	<script type="text/javascript" src="../lib/jquery/jquery-1.7.2.js"></script>
+	<script type="text/javascript" src="../lib/angular/angular.js"></script>
+    <script type="text/javascript" src="../lib/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../lib/seajs/sea.js"></script>
+    <script type="text/javascript" src="../js/config.js"></script>
+	<script type="text/javascript" src="../ui-demo/js/showdown.js"></script>
 	<script type="text/javascript">
-	    seajs.use('base/js/mvc', pageInit);
+	    seajs.use('./../js/mvc', pageInit);
 	    function pageInit(mvc){
 	        mvc.init({dependencies:['ui']});
 	    };
